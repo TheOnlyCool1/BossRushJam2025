@@ -12,3 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dcffe0370cf09b4d9336520b5a439f3, type: 3}
   m_Name: MovementStats
   m_EditorClassIdentifier: 
+  PlayerLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  JumpPower: 32
+  JumpBuffer: 0.2
+  CoyoteTime: 0.15
+  MaxSpeed: 14
+  Acceleration: 114.2
+  GroundDeceleration: 48.9
+  AirDeceleration: 30
+  FallAcceleration: 105
+  JumpReleasedEarlyGravityModifier: 2
+  MaxFallSpeed: 35
+  GroundingForce: -1.5
+  GrounderDistance: 0.104
