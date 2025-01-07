@@ -17,6 +17,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Keybinds")]
     public List<KeyCode> JumpKeys = new List<KeyCode>();
 
+    [Header("Modifiers")]
+    public bool EnableDoubleJump;
+
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -110,6 +113,7 @@ public class PlayerMovement : MonoBehaviour
             _coyoteUsable = true;
             _queuedJumpUsable = true;
             _jumpReleasedEarly = false;
+            _doubleJumpUsable = true;
 
             // invoke event here if needed
         }
@@ -132,8 +136,11 @@ public class PlayerMovement : MonoBehaviour
     private bool _coyoteUsable;
     private float _timeJumpWasPressed;
 
+    private bool _doubleJumpUsable;
+
     private bool HasJumpQueued => _queuedJumpUsable && _time < _timeJumpWasPressed + _moveStats.JumpBuffer; // queues up next jump if the button was pressed within specified time
     private bool CanUseCoyote => _coyoteUsable && !_grounded && _time < _frameLeftGrounded + _moveStats.CoyoteTime; // allows for player to jump for short period after walking off a ledge
+    private bool CanUseDoubleJump => _doubleJumpUsable && !_grounded && EnableDoubleJump;
 
     private void HandleJump()
     {
@@ -145,6 +152,8 @@ public class PlayerMovement : MonoBehaviour
         if (_grounded || CanUseCoyote) ExecuteJump(); // execute jump if grounded or coyote time is useable
 
         _jumpToConsume = false; // to make sure the jump is only executed once
+
+        if (CanUseDoubleJump) DoubleJumpExecuter();
     }
     private void ExecuteJump()
     {
@@ -158,6 +167,13 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Jump Executed");
         // invoke event here if needed
     }
+
+    private void DoubleJumpExecuter()
+    {
+        ExecuteJump();
+        _doubleJumpUsable = false;
+    }
+
     #endregion
 
     #region Horizontal Movement
